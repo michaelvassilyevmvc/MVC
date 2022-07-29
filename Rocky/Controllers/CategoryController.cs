@@ -28,18 +28,79 @@ namespace Rocky.Controllers
         }
 
         [HttpGet]
-        public IActionResult Create(){
+        public IActionResult Create()
+        {
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Category obj){
-            _db.Category.Add(obj);
-            _db.SaveChanges();
+        public IActionResult Create(Category obj)
+        {
+            if (ModelState.IsValid)
+            {
+                _db.Category.Add(obj);
+                _db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return View(obj);
+
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null || id == 0)
+            {
+                return NotFound();
+            }
+
+            var obj = await _db.Category.FindAsync(id);
+
+            return View(obj);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(Category obj)
+        {
+            if (ModelState.IsValid)
+            {
+                _db.Category.Update(obj);
+                _db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return View(obj);
+
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null || id == 0)
+            {
+                return NotFound();
+            }
+
+            var obj = await _db.Category.FindAsync(id);
+
+            return View(obj);
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeletePost(int? id)
+        {
+            var obj = await _db.Category.FindAsync(id);
+            if (obj == null)
+            {
+                return NotFound();
+            }
+            _db.Category.Remove(obj);
+            await _db.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
-        
     }
 }
