@@ -7,7 +7,8 @@ namespace Rocky.Models
     {
         [Key]
         public int Id { get; set; }
-        [DisplayName("Product Name")]
+        [DisplayName("Название")]
+        [Required]
         public string Name { get; set; }
     }
 }
