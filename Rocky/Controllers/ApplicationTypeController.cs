@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Rocky.Data;
@@ -24,18 +25,75 @@ namespace Rocky.Controllers
         }
 
         [HttpGet]
-        public IActionResult Create(){
+        public IActionResult Create()
+        {
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(ApplicationType obj){
+        public IActionResult Create(ApplicationType obj)
+        {
             _db.ApplicationType.Add(obj);
             _db.SaveChanges();
             return RedirectToAction("Index");
         }
 
-        
+        [HttpGet]
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null || id == 0)
+            {
+                return NotFound();
+            }
+
+            var obj = await _db.ApplicationType.FindAsync(id);
+
+            return View(obj);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(ApplicationType obj)
+        {
+            if (ModelState.IsValid)
+            {
+                _db.ApplicationType.Update(obj);
+                await _db.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
+            return View(obj);
+
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null || id == 0)
+            {
+                return NotFound();
+            }
+
+            var obj = await _db.ApplicationType.FindAsync(id);
+
+            return View(obj);
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeletePost(int? id)
+        {
+            var obj = await _db.ApplicationType.FindAsync(id);
+            if (obj == null)
+            {
+                return NotFound();
+            }
+            _db.ApplicationType.Remove(obj);
+            await _db.SaveChangesAsync();
+            return RedirectToAction("Index");
+        }
+
+
     }
 }

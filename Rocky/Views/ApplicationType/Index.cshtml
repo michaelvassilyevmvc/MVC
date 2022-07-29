@@ -25,7 +25,14 @@
                 {
                     <tr>
                         <td width="50%">@obj.Name</td>
-                        <td width="20%"></td>
+                        <td class="text-center">
+                            <div class="w-75 btn-group" role="group">
+                                <a asp-action="Edit" asp-route-Id="@obj.Id"  class="btn btn-primary mx-2" title="Edit">
+                                    <i class="fas fa-edit"></i>&nbsp;</a>
+                                <a asp-action="Delete" asp-route-Id="@obj.Id"  class="btn btn-danger" title="Delete">
+                                    <i class="fas fa-trash-alt"></i>&nbsp;</a>
+                            </div>
+                        </td>
                     </tr>
                 }
             </tbody>
