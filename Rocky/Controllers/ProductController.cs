@@ -26,13 +26,7 @@ namespace Rocky.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var objList = await _db.Product.ToListAsync();
-
-            foreach (var obj in objList)
-            {
-                obj.Category = await _db.Category.FirstOrDefaultAsync(u => u.Id == obj.CategoryId);
-            }
-
+            var objList = await _db.Product.Include(x => x.Category).Include(x => x.ApplicationType).ToListAsync();
             return View(objList);
         }
 
@@ -53,6 +47,11 @@ namespace Rocky.Controllers
             {
                 Product = new Product(),
                 CategorySelectList = _db.Category.Select(x => new SelectListItem
+                {
+                    Text = x.Name,
+                    Value = x.Id.ToString()
+                }),
+                ApplicationTypeSelectList = _db.ApplicationType.Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
@@ -141,6 +140,12 @@ namespace Rocky.Controllers
                 Value = x.Id.ToString()
             });
 
+            productVM.ApplicationTypeSelectList = _db.ApplicationType.Select(x => new SelectListItem
+            {
+                Text = x.Name,
+                Value = x.Id.ToString()
+            });
+
             return View(productVM);
         }
 
@@ -154,7 +159,7 @@ namespace Rocky.Controllers
                 return NotFound();
             }
 
-            Product product = await _db.Product.Include(x => x.Category).FirstOrDefaultAsync(x => x.Id == id);
+            Product product = await _db.Product.Include(x => x.Category).Include(x => x.ApplicationType).FirstOrDefaultAsync(x => x.Id == id);
             if (product == null)
             {
                 return NotFound();
