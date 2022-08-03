@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Rocky.Data;
@@ -7,6 +8,7 @@ using Rocky.Models;
 
 namespace Rocky.Controllers
 {
+    
     public class CategoryController : Controller
     {
         private readonly ILogger<CategoryController> _logger;
