@@ -8,7 +8,7 @@ using Rocky.Models;
 
 namespace Rocky.Controllers
 {
-    
+    [Authorize(Roles = WC.AdminRole)]
     public class CategoryController : Controller
     {
         private readonly ILogger<CategoryController> _logger;

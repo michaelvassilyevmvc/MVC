@@ -10,25 +10,32 @@ using Rocky.Models.ViewModels;
 using Microsoft.AspNetCore.Hosting;
 using System;
 using System.IO;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Rocky.Controllers
 {
+    [Authorize(Roles = WC.AdminRole)]
     public class ProductController : Controller
     {
         private readonly ApplicationDbContext _db;
         private readonly IWebHostEnvironment _webHostEnvironment;
-        public ProductController(ApplicationDbContext db, IWebHostEnvironment webHostEnvironment)
-        {
-            _db = db;
-            _webHostEnvironment = webHostEnvironment;
-        }
+        public ProductController
+        (
+            ApplicationDbContext db, 
+            IWebHostEnvironment webHostEnvironment
+        )
+            {
+                _db = db;
+                _webHostEnvironment = webHostEnvironment;
+            }
 
         [HttpGet]
-        public async Task<IActionResult> Index()
-        {
-            var objList = await _db.Product.Include(x => x.Category).Include(x => x.ApplicationType).ToListAsync();
-            return View(objList);
-        }
+        public async Task<IActionResult> Index
+        ()
+            {
+                var objList = await _db.Product.Include(x => x.Category).Include(x => x.ApplicationType).ToListAsync();
+                return View(objList);
+            }
 
         [HttpGet]
         public IActionResult Upsert(int? id)

@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Rocky.Utility;
 
-namespace Rocky
+namespace Rocky 
 {
     public class Startup
     {
