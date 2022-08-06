@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rocky", "Rocky\Rocky.csproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rocky_Utility", "Rocky_Utility\Rocky_Utility.csproj", "{D18DCEBF-9064-4905-95FA-9CA9F1224216}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rocky_Models", "Rocky_Models\Rocky_Models.csproj", "{94C2B981-A0CE-4944-AFD7-7FB712AEC6AD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rocky_DataAccess", "Rocky_DataAccess\Rocky_DataAccess.csproj", "{3DDF8E21-A258-4FFC-B26D-41413A386822}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +28,13 @@ Global
 		{D18DCEBF-9064-4905-95FA-9CA9F1224216}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D18DCEBF-9064-4905-95FA-9CA9F1224216}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D18DCEBF-9064-4905-95FA-9CA9F1224216}.Release|Any CPU.Build.0 = Release|Any CPU
+		{94C2B981-A0CE-4944-AFD7-7FB712AEC6AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94C2B981-A0CE-4944-AFD7-7FB712AEC6AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{94C2B981-A0CE-4944-AFD7-7FB712AEC6AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{94C2B981-A0CE-4944-AFD7-7FB712AEC6AD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3DDF8E21-A258-4FFC-B26D-41413A386822}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3DDF8E21-A258-4FFC-B26D-41413A386822}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3DDF8E21-A258-4FFC-B26D-41413A386822}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3DDF8E21-A258-4FFC-B26D-41413A386822}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

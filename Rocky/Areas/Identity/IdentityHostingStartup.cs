@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Rocky.Data;
+using Rocky_DataAccess.Data;
 
 [assembly: HostingStartup(typeof(Rocky.Areas.Identity.IdentityHostingStartup))]
 namespace Rocky.Areas.Identity
@@ -14,7 +14,8 @@ namespace Rocky.Areas.Identity
     {
         public void Configure(IWebHostBuilder builder)
         {
-            builder.ConfigureServices((context, services) => {
+            builder.ConfigureServices((context, services) =>
+            {
             });
         }
     }

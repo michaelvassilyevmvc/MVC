@@ -1,4 +1,4 @@
-﻿@model Rocky.Models.ViewModels.HomeVM
+﻿@model Rocky_Models.ViewModels.HomeVM
 
 <div class="container">
     <div class="text-center">
@@ -20,25 +20,23 @@
 </div>
 
 @section Scripts {
-    <script>
-    $(document).ready(function(){
+<script>
+    $(document).ready(function () {
 
-    $(".filter-button").click(function(){
+        $(".filter-button").click(function () {
 
-        var value = $(this).attr('data-filter');
-        if(value == "all")
-        {
-            $('.filter').show('1000');
-        }
-        else
-        {
-            console.log('boom');
-            $(".filter").not('.'+value).hide('3000');
-            $('.filter').filter('.'+value).show('3000');
-            
-        }
+            var value = $(this).attr('data-filter');
+            if (value == "all") {
+                $('.filter').show('1000');
+            }
+            else {
+                console.log('boom');
+                $(".filter").not('.' + value).hide('3000');
+                $('.filter').filter('.' + value).show('3000');
+
+            }
+        });
+
     });
-
-});
 </script>
 }

@@ -1,12 +1,12 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Rocky.Data;
+using Rocky_DataAccess.Data;
 using Microsoft.EntityFrameworkCore;
-using Rocky.Models;
+using Rocky_Models;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Linq;
-using Rocky.Models.ViewModels;
+using Rocky_Models.ViewModels;
 using Microsoft.AspNetCore.Hosting;
 using System;
 using System.IO;

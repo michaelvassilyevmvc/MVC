@@ -1,8 +1,8 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Rocky.Data;
+using Rocky_DataAccess.Data;
 using Microsoft.EntityFrameworkCore;
-using Rocky.Models;
+using Rocky_Models;
 
 namespace Rocky.Controllers
 {

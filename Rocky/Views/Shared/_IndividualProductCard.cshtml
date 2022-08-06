@@ -1,4 +1,4 @@
-@model Rocky.Models.Product
+@model Rocky_Models.Product
 @using Rocky_Utility
 
 <div class="col-lg-4 col-md-6 pb-4 filter @Model.Category.Name.Replace(' ','_')">
@@ -13,10 +13,11 @@
             alt="Card image cap">
         <div class="card-body p-1 px-3 row">
             <div class="col-6">
-                <span class="badge p-2 border w-100" style="background-color:lavenderblush">@Model.Category.Name</span>
+                <span class="badge p-2 border w-100 text-dark"
+                    style="background-color:lavenderblush">@Model.Category.Name</span>
             </div>
             <div class="col-6 border-0">
-                <span class="badge p-2 border w-100"
+                <span class="badge p-2 border w-100 text-dark"
                     style="background-color:aliceblue">@Model.ApplicationType.Name</span>
             </div>
             <div class="col-12 pt-2" style="font-size:13px; text-align:justify">

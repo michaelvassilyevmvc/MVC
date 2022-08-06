@@ -1,4 +1,4 @@
-@model Rocky.Models.ProductManager
+@model Rocky_Models.ProductManager
 
 @{
     ViewData["Title"] = "Редактировать товар";
@@ -23,15 +23,16 @@
                     </div>
 
                 </div>
-                
+
                 <div class="form-group row">
                     <div class="col-8 offset-4 row">
 
                         <div class="col">
-                           <input type="submit" class="btn btn-info w-100" value="Подтвердить" />
+                            <input type="submit" class="btn btn-info w-100" value="Подтвердить" />
                         </div>
                         <div class="col">
-                            <a asp-action="Index"  class="btn btn-success w-100"><i class="fas fa-sign-out-alt"></i>&nbsp;Отмена </a>
+                            <a asp-action="Index" class="btn btn-success w-100"><i
+                                    class="fas fa-sign-out-alt"></i>&nbsp;Отмена </a>
                         </div>
                     </div>
                 </div>
@@ -44,5 +45,6 @@
 </form>
 
 @section Scripts{
-    @{<partial name="_ValidationScriptsPartial" />}
+@{
+    <partial name="_ValidationScriptsPartial" />}
 }

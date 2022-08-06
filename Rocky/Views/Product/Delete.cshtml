@@ -1,4 +1,4 @@
-@model Rocky.Models.Product
+@model Rocky_Models.Product
 @using Rocky_Utility
 
 @{
@@ -7,14 +7,14 @@
 
 <form method="post">
     <input asp-for="Id" hidden />
-    <div class="border p-3">
+    <div class="border p-3 bg-white">
         <div class="form-group row">
             <h2 class="text-info pl-3">Delete</h2>
         </div>
 
         <div class="row">
             <div class="col-8">
-                <div class="form-group row">
+                <div class="form-group row py-2">
                     <div class="col-4">
                         <label asp-for="Name"></label>
                     </div>
@@ -24,7 +24,7 @@
 
                 </div>
 
-                <div class="form-group row">
+                <div class="form-group row py-2">
                     <div class="col-4">
                         <label asp-for="Price"></label>
                     </div>
@@ -34,7 +34,7 @@
 
                 </div>
 
-                <div class="form-group row">
+                <div class="form-group row py-2">
                     <div class="col-4">
                         <label asp-for="Description"></label>
                     </div>
@@ -44,7 +44,7 @@
 
                 </div>
 
-                <div class="form-group row">
+                <div class="form-group row py-2">
                     <div class="col-4">
                         <label asp-for="CategoryId"></label>
                     </div>
@@ -54,7 +54,7 @@
 
                 </div>
 
-                <div class="form-group row">
+                <div class="form-group row py-2">
                     <div class="col-4">
                         <label asp-for="ApplicationTypeId"></label>
                     </div>
@@ -64,24 +64,23 @@
 
                 </div>
 
-                <div class="form-group row">
+                <div class="form-group row py-2">
                     <div class="col-8 offset-4 row">
 
                         <div class="col">
-                             <button type="submit" class="btn btn-danger w-100">Delete</button>                                                   
+                            <button type="submit" class="btn btn-danger w-100">Delete</button>
                         </div>
                         <div class="col">
-                            <a asp-action="Index"  class="btn btn-success w-100"><i class="fas fa-sign-out-alt"></i>&nbsp;Back </a>
+                            <a asp-action="Index" class="btn btn-success w-100"><i
+                                    class="fas fa-sign-out-alt"></i>&nbsp;Back </a>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="col-4">
-                @if(Model.Id != 0)
+                @if (Model.Id != 0)
                 {
-                <img src="@WC.ImagePath@Model.Image" 
-                    style="border-radius:5px; border:1px solid #bbb;"
-                    class="w-100" />
+                    <img src="@WC.ImagePath@Model.Image" style="border-radius:5px; border:1px solid #bbb;" class="w-100" />
                 }
             </div>
         </div>
@@ -89,12 +88,12 @@
 </form>
 
 @section Scripts{
-    <script>
-         $(document).ready(function() {
-            $('.summernote').summernote({
-                disable:true
-                height:250 
-            });
+<script>
+    $(document).ready(function () {
+        $('.summernote').summernote({
+            disable: true,
+            height: 250
         });
-    </script>
+    });
+</script>
 }
