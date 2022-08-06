@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Rocky_Models\Rocky_Models.csproj"></ProjectReference>
+    <ProjectReference Include="..\Rocky_Utility\Rocky_Utility.csproj"></ProjectReference>
   </ItemGroup>
 
 </Project>

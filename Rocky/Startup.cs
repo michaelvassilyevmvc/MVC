@@ -13,6 +13,8 @@ using Rocky_DataAccess.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Rocky_Utility;
+using Rocky_DataAccess.Repository;
+using Rocky_DataAccess.Repository.IRepository;
 
 namespace Rocky
 {
@@ -35,6 +37,7 @@ namespace Rocky
 
             services.AddTransient<IEmailSender, EmailSender>();
 
+
             services.AddHttpContextAccessor();
             services.AddSession(options =>
             {
@@ -42,6 +45,10 @@ namespace Rocky
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
             });
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<IApplicationTypeRepository, ApplicationTypeRepository>();
+            services.AddScoped<IProductRepository, ProductRepository>();
+
             services.AddControllersWithViews();
         }
 

@@ -12,58 +12,41 @@ using System;
 using System.IO;
 using Microsoft.AspNetCore.Authorization;
 using Rocky_Utility;
+using Rocky_DataAccess.Repository.IRepository;
 
 namespace Rocky.Controllers
 {
     [Authorize(Roles = WC.AdminRole)]
     public class ProductController : Controller
     {
-        private readonly ApplicationDbContext _db;
+        private readonly IProductRepository _prodRepo;
         private readonly IWebHostEnvironment _webHostEnvironment;
         public ProductController
         (
-            ApplicationDbContext db,
+            IProductRepository prodRepo,
             IWebHostEnvironment webHostEnvironment
         )
         {
-            _db = db;
+            _prodRepo = prodRepo;
             _webHostEnvironment = webHostEnvironment;
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index
+        public IActionResult Index
         ()
         {
-            var objList = await _db.Product.Include(x => x.Category).Include(x => x.ApplicationType).ToListAsync();
+            var objList = _prodRepo.GetAll(includeProperties: "Category,ApplicationType");
             return View(objList);
         }
 
         [HttpGet]
         public IActionResult Upsert(int? id)
         {
-            // IEnumerable<SelectListItem> CategoryDropDown = _db.Category.Select(x => new SelectListItem
-            // {
-            //     Text = x.Name,
-            //     Value = x.Id.ToString()
-            // });
-
-            // ViewData["CategoryDropDown"] = CategoryDropDown;
-
-            // Product product = new Product();
-
             ProductVM productVM = new ProductVM
             {
                 Product = new Product(),
-                CategorySelectList = _db.Category.Select(x => new SelectListItem
-                {
-                    Text = x.Name,
-                    Value = x.Id.ToString()
-                }),
-                ApplicationTypeSelectList = _db.ApplicationType.Select(x => new SelectListItem
-                {
-                    Text = x.Name,
-                    Value = x.Id.ToString()
-                })
+                CategorySelectList = _prodRepo.GetAllDropdownList(WC.CategoryName),
+                ApplicationTypeSelectList = _prodRepo.GetAllDropdownList(WC.ApplicationTypeName)
             };
 
             if (id == null)
@@ -72,7 +55,7 @@ namespace Rocky.Controllers
             }
             else
             {
-                productVM.Product = _db.Product.Find(id);
+                productVM.Product = _prodRepo.Find(id.GetValueOrDefault());
                 if (productVM.Product == null)
                 {
                     return NotFound();
@@ -83,7 +66,7 @@ namespace Rocky.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Upsert(ProductVM productVM)
+        public IActionResult Upsert(ProductVM productVM)
         {
             if (ModelState.IsValid)
             {
@@ -103,13 +86,13 @@ namespace Rocky.Controllers
                     }
 
                     productVM.Product.Image = fileName + extension;
-                    _db.Product.Add(productVM.Product);
+                    _prodRepo.Add(productVM.Product);
 
                 }
                 else
                 {
                     //Updating
-                    var objFromDb = _db.Product.AsNoTracking().FirstOrDefault(u => u.Id == productVM.Product.Id);
+                    var objFromprodRepo = _prodRepo.FirstOrDefault(u => u.Id == productVM.Product.Id, isTracking: false);
 
                     if (files.Count() > 0)
                     {
@@ -117,7 +100,7 @@ namespace Rocky.Controllers
                         string fileName = Guid.NewGuid().ToString();
                         string extension = Path.GetExtension(files[0].FileName);
 
-                        var oldFile = Path.Combine(upload, objFromDb.Image);
+                        var oldFile = Path.Combine(upload, objFromprodRepo.Image);
                         if (System.IO.File.Exists(oldFile))
                         {
                             System.IO.File.Delete(oldFile);
@@ -132,27 +115,19 @@ namespace Rocky.Controllers
                     }
                     else
                     {
-                        productVM.Product.Image = objFromDb.Image;
+                        productVM.Product.Image = objFromprodRepo.Image;
                     }
 
-                    _db.Product.Update(productVM.Product);
+                    _prodRepo.Update(productVM.Product);
                 }
 
-                await _db.SaveChangesAsync();
+                _prodRepo.Save();
                 return RedirectToAction("Index");
             }
 
-            productVM.CategorySelectList = _db.Category.Select(x => new SelectListItem
-            {
-                Text = x.Name,
-                Value = x.Id.ToString()
-            });
+            productVM.CategorySelectList = _prodRepo.GetAllDropdownList(WC.CategoryName);
 
-            productVM.ApplicationTypeSelectList = _db.ApplicationType.Select(x => new SelectListItem
-            {
-                Text = x.Name,
-                Value = x.Id.ToString()
-            });
+            productVM.ApplicationTypeSelectList = _prodRepo.GetAllDropdownList(WC.ApplicationTypeName);
 
             return View(productVM);
         }
@@ -160,14 +135,15 @@ namespace Rocky.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> Delete(int? id)
+        public IActionResult Delete(int? id)
         {
             if (id == null || id == 0)
             {
                 return NotFound();
             }
 
-            Product product = await _db.Product.Include(x => x.Category).Include(x => x.ApplicationType).FirstOrDefaultAsync(x => x.Id == id);
+            Product product = _prodRepo.FirstOrDefault(u => u.Id == id, includeProperties: "Category,ApplicationType");
+
             if (product == null)
             {
                 return NotFound();
@@ -177,9 +153,9 @@ namespace Rocky.Controllers
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeletePost(int? id)
+        public IActionResult DeletePost(int? id)
         {
-            var obj = _db.Product.Find(id);
+            var obj = _prodRepo.Find(id.GetValueOrDefault());
             if (obj == null)
             {
                 return NotFound();
@@ -193,8 +169,8 @@ namespace Rocky.Controllers
                 System.IO.File.Delete(oldFile);
             }
 
-            _db.Product.Remove(obj);
-            await _db.SaveChangesAsync();
+            _prodRepo.Remove(obj);
+            _prodRepo.Save();
             return RedirectToAction("Index");
         }
     }

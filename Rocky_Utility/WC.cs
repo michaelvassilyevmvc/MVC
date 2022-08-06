@@ -9,6 +9,9 @@ namespace Rocky_Utility
         public const string CustomerRole = "Customer";
         public const string EmailAdmin = "rebusmv@rambler.ru";
 
+        public const string ApplicationTypeName = "ApplicationType";
+        public const string CategoryName = "Category";
+
 
     }
 }

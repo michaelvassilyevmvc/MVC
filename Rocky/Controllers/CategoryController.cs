@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Rocky_DataAccess.Data;
+using Rocky_DataAccess.Repository.IRepository;
 using Rocky_Models;
 using Rocky_Utility;
 
@@ -13,17 +14,17 @@ namespace Rocky.Controllers
     public class CategoryController : Controller
     {
         private readonly ILogger<CategoryController> _logger;
-        private readonly ApplicationDbContext _db;
+        private readonly ICategoryRepository _catRepo;
 
-        public CategoryController(ILogger<CategoryController> logger, ApplicationDbContext db)
+        public CategoryController(ILogger<CategoryController> logger, ICategoryRepository catRepo)
         {
             _logger = logger;
-            this._db = db;
+            _catRepo = catRepo;
         }
 
         public IActionResult Index()
         {
-            IEnumerable<Category> objList = _db.Category;
+            IEnumerable<Category> objList = _catRepo.GetAll();
             return View(objList);
         }
 
@@ -39,8 +40,8 @@ namespace Rocky.Controllers
         {
             if (ModelState.IsValid)
             {
-                _db.Category.Add(obj);
-                _db.SaveChanges();
+                _catRepo.Add(obj);
+                _catRepo.Save();
                 return RedirectToAction("Index");
             }
             return View(obj);
@@ -48,26 +49,26 @@ namespace Rocky.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Edit(int? id)
+        public IActionResult Edit(int? id)
         {
             if (id == null || id == 0)
             {
                 return NotFound();
             }
 
-            var obj = await _db.Category.FindAsync(id);
+            var obj = _catRepo.Find(id.GetValueOrDefault());
 
             return View(obj);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Category obj)
+        public IActionResult Edit(Category obj)
         {
             if (ModelState.IsValid)
             {
-                _db.Category.Update(obj);
-                await _db.SaveChangesAsync();
+                _catRepo.Update(obj);
+                _catRepo.Save();
                 return RedirectToAction("Index");
             }
             return View(obj);
@@ -75,14 +76,14 @@ namespace Rocky.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Delete(int? id)
+        public IActionResult Delete(int? id)
         {
             if (id == null || id == 0)
             {
                 return NotFound();
             }
 
-            var obj = await _db.Category.FindAsync(id);
+            var obj = _catRepo.Find(id.GetValueOrDefault());
 
             return View(obj);
         }
@@ -90,15 +91,15 @@ namespace Rocky.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeletePost(int? id)
+        public IActionResult DeletePost(int? id)
         {
-            var obj = await _db.Category.FindAsync(id);
+            var obj = _catRepo.Find(id.GetValueOrDefault());
             if (obj == null)
             {
                 return NotFound();
             }
-            _db.Category.Remove(obj);
-            await _db.SaveChangesAsync();
+            _catRepo.Remove(obj);
+            _catRepo.Save();
             return RedirectToAction("Index");
         }
 
