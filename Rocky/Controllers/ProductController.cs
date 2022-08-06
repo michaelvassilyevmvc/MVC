@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Hosting;
 using System;
 using System.IO;
 using Microsoft.AspNetCore.Authorization;
+using Rocky_Utility;
 
 namespace Rocky.Controllers
 {
@@ -21,21 +22,21 @@ namespace Rocky.Controllers
         private readonly IWebHostEnvironment _webHostEnvironment;
         public ProductController
         (
-            ApplicationDbContext db, 
+            ApplicationDbContext db,
             IWebHostEnvironment webHostEnvironment
         )
-            {
-                _db = db;
-                _webHostEnvironment = webHostEnvironment;
-            }
+        {
+            _db = db;
+            _webHostEnvironment = webHostEnvironment;
+        }
 
         [HttpGet]
         public async Task<IActionResult> Index
         ()
-            {
-                var objList = await _db.Product.Include(x => x.Category).Include(x => x.ApplicationType).ToListAsync();
-                return View(objList);
-            }
+        {
+            var objList = await _db.Product.Include(x => x.Category).Include(x => x.ApplicationType).ToListAsync();
+            return View(objList);
+        }
 
         [HttpGet]
         public IActionResult Upsert(int? id)

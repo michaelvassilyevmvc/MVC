@@ -1,6 +1,7 @@
 @model IEnumerable<Product>
+@using Rocky_Utility
 
-@if(Model.Count() > 0)
+@if (Model.Count() > 0)
 {
     <form method="post">
         <br />
@@ -14,7 +15,8 @@
                                 Shopping Cart
                             </div>
                             <div class="col-6 text-right">
-                                <a asp-action="Index" asp-controller="Home" class="btn btn-outline-info btn-sm">Continue Shopping</a>
+                                <a asp-action="Index" asp-controller="Home" class="btn btn-outline-info btn-sm">Continue
+                                    Shopping</a>
                             </div>
                         </div>
                         <div class="card-body">
@@ -38,7 +40,7 @@
                             {
                                 <div class="row h-100">
                                     <div class="col-4 col-md-2 text-center py-2">
-                                        <img src="@WC.ImagePath@obj.Image" class="rounded img-card-min"  />
+                                        <img src="@WC.ImagePath@obj.Image" class="rounded img-card-min" />
                                     </div>
                                     <div class="col-8 col-lg-7">
                                         <h5>@obj.Name</h5>
