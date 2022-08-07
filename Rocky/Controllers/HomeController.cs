@@ -2,9 +2,7 @@
 using System.Diagnostics;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Rocky_DataAccess.Data;
 using Rocky_Models;
 using Rocky_Models.ViewModels;
 using Rocky_Utility;
@@ -66,6 +64,7 @@ namespace Rocky.Controllers
             }
             shoppingCartList.Add(new ShoppingCart { ProductId = id });
             HttpContext.Session.Set(WC.SessionCart, shoppingCartList);
+            TempData[WC.Success] = "Operation is success!";
 
             return RedirectToAction(nameof(Index));
         }
@@ -89,7 +88,7 @@ namespace Rocky.Controllers
 
 
             HttpContext.Session.Set(WC.SessionCart, shoppingCartList);
-
+            TempData[WC.Success] = "Operation is success!";
             return RedirectToAction(nameof(Index));
         }
 

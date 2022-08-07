@@ -42,8 +42,10 @@ namespace Rocky.Controllers
             {
                 _catRepo.Add(obj);
                 _catRepo.Save();
+                TempData[WC.Success] = "Category created successfully";
                 return RedirectToAction("Index");
             }
+            TempData[WC.Error] = "Error while creating category";
             return View(obj);
 
         }
@@ -69,8 +71,10 @@ namespace Rocky.Controllers
             {
                 _catRepo.Update(obj);
                 _catRepo.Save();
+                TempData[WC.Success] = "Operation is success!";
                 return RedirectToAction("Index");
             }
+            TempData[WC.Error] = "Operation is error!";
             return View(obj);
 
         }
@@ -96,10 +100,12 @@ namespace Rocky.Controllers
             var obj = _catRepo.Find(id.GetValueOrDefault());
             if (obj == null)
             {
+                TempData[WC.Error] = "Operation is error!";
                 return NotFound();
             }
             _catRepo.Remove(obj);
             _catRepo.Save();
+            TempData[WC.Success] = "Operation is success!";
             return RedirectToAction("Index");
         }
 

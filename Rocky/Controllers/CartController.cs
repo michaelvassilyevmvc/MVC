@@ -154,6 +154,7 @@ namespace Rocky.Controllers
             };
 
             _inqHRepo.Add(inquiryHeader);
+
             _inqHRepo.Save();
 
             foreach (var prod in ProductUserVM.ProductList)
@@ -166,7 +167,7 @@ namespace Rocky.Controllers
                 _inqDRepo.Add(inquiryDetail);
             }
             _inqDRepo.Save();
-
+            TempData[WC.Success] = "Operation is success!";
             return RedirectToAction(nameof(InquiryConfirmation));
         }
 
@@ -187,7 +188,7 @@ namespace Rocky.Controllers
 
             shoppingCartList.Remove(shoppingCartList.FirstOrDefault(x => x.ProductId == Id));
             HttpContext.Session.Set(WC.SessionCart, shoppingCartList);
-
+            TempData[WC.Success] = "Operation is success!";
             return RedirectToAction(nameof(Index));
 
         }

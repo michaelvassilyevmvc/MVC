@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Rocky_DataAccess.Data;
 using Microsoft.EntityFrameworkCore;
 using Rocky_Models;
+using Rocky_Utility;
 
 namespace Rocky.Controllers
 {
@@ -33,6 +34,7 @@ namespace Rocky.Controllers
         {
             _db.ProductManager.Add(product);
             await _db.SaveChangesAsync();
+            TempData[WC.Success] = "Operation is success!";
             return RedirectToAction("Index");
         }
 
@@ -56,8 +58,10 @@ namespace Rocky.Controllers
             {
                 _db.ProductManager.Update(product);
                 await _db.SaveChangesAsync();
+                TempData[WC.Success] = "Operation is success!";
                 return RedirectToAction("Index");
             }
+            TempData[WC.Error] = "Operation is error!";
             return View(product);
         }
 
@@ -84,6 +88,7 @@ namespace Rocky.Controllers
 
             _db.ProductManager.Remove(obj);
             await _db.SaveChangesAsync();
+            TempData[WC.Success] = "Operation is success!";
             return RedirectToAction("Index");
         }
     }

@@ -1,10 +1,5 @@
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Rocky_DataAccess.Data;
-using Microsoft.EntityFrameworkCore;
 using Rocky_Models;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Linq;
 using Rocky_Models.ViewModels;
 using Microsoft.AspNetCore.Hosting;
@@ -120,10 +115,11 @@ namespace Rocky.Controllers
 
                     _prodRepo.Update(productVM.Product);
                 }
-
+                TempData[WC.Success] = "Operation is success!";
                 _prodRepo.Save();
                 return RedirectToAction("Index");
             }
+            TempData[WC.Error] = "Operation is error!";
 
             productVM.CategorySelectList = _prodRepo.GetAllDropdownList(WC.CategoryName);
 
@@ -158,6 +154,7 @@ namespace Rocky.Controllers
             var obj = _prodRepo.Find(id.GetValueOrDefault());
             if (obj == null)
             {
+                TempData[WC.Error] = "Operation is error!";
                 return NotFound();
             }
 
@@ -171,6 +168,7 @@ namespace Rocky.Controllers
 
             _prodRepo.Remove(obj);
             _prodRepo.Save();
+            TempData[WC.Success] = "Operation is success!";
             return RedirectToAction("Index");
         }
     }
