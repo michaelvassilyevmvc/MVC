@@ -4,19 +4,19 @@ using Rocky_Models;
 
 namespace Rocky_DataAccess.Repository
 {
-    public class InquiryHeaderRepository : Repository<InquiryHeader>, IInquiryHeaderRepository
+    public class OrderDetailRepository : Repository<OrderDetail>, IOrderDetailRepository
     {
         private readonly ApplicationDbContext _db;
 
-        public InquiryHeaderRepository(ApplicationDbContext db) : base(db)
+        public OrderDetailRepository(ApplicationDbContext db) : base(db)
         {
             _db = db;
         }
 
 
-        public void Update(InquiryHeader obj)
+        public void Update(OrderDetail obj)
         {
-            _db.InquiryHeader.Update(obj);
+            _db.OrderDetail.Update(obj);
         }
     }
 }
