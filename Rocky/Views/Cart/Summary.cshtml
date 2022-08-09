@@ -199,7 +199,7 @@
             instance.requestPaymentMethod(function (err, payload) {
                 document.querySelector('#nonce').value = payload.nonce;
                 form.submit();
-            });
+            }); 
         });
     });
 </script>

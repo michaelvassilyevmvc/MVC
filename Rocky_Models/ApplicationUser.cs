@@ -17,5 +17,6 @@ namespace Rocky_Models
         [NotMapped]
         public string PostalCode { get; set; }
 
+
     }
 }

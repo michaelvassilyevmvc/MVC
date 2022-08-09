@@ -205,8 +205,8 @@ body {
 }
 
 .facebook-btn {
-  background-color: #3c589c;
-  color: white;
+  background-color: #3c589c !important;
+  color: white !important;
 }
 
 #logreg-forms .form-reset,
