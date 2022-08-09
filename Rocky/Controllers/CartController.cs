@@ -24,7 +24,6 @@ namespace Rocky.Controllers
     [Authorize]
     public class CartController : Controller
     {
-        // private readonly ApplicationDbContext _db;
         private readonly IProductRepository _prodRepo;
         private readonly IApplicationUserRepository _appUserRepo;
         private readonly IInquiryHeaderRepository _inqHRepo;
@@ -32,9 +31,6 @@ namespace Rocky.Controllers
         private readonly IOrderHeaderRepository _ordHRepo;
         private readonly IOrderDetailRepository _ordDRepo;
         private readonly IBrainTreeGate _brain;
-
-
-
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly IEmailSender _emailSender;
 
@@ -42,7 +38,6 @@ namespace Rocky.Controllers
         public ProductUserVM ProductUserVM { get; set; }
 
         public CartController(
-            ApplicationDbContext db,
             IWebHostEnvironment webHostEnvironment,
             IEmailSender emailSender,
             IProductRepository prodRepo,
