@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Rocky_Utility;
 using Rocky_DataAccess.Repository;
 using Rocky_DataAccess.Repository.IRepository;
+using Rocky_Utility.BrainTree;
 
 namespace Rocky
 {
@@ -45,6 +46,9 @@ namespace Rocky
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
             });
+            services.Configure<BrainTreeSettings>(Configuration.GetSection("BrainTree"));
+            services.AddSingleton<IBrainTreeGate, BraintreeGate>();
+
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IApplicationTypeRepository, ApplicationTypeRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();

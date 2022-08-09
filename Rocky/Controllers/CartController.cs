@@ -1,5 +1,7 @@
+using Braintree;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Rocky_DataAccess.Data;
@@ -7,6 +9,7 @@ using Rocky_DataAccess.Repository.IRepository;
 using Rocky_Models;
 using Rocky_Models.ViewModels;
 using Rocky_Utility;
+using Rocky_Utility.BrainTree;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -28,6 +31,7 @@ namespace Rocky.Controllers
         private readonly IInquiryDetailRepository _inqDRepo;
         private readonly IOrderHeaderRepository _ordHRepo;
         private readonly IOrderDetailRepository _ordDRepo;
+        private readonly IBrainTreeGate _brain;
 
 
 
@@ -46,7 +50,8 @@ namespace Rocky.Controllers
             IInquiryHeaderRepository inqHRepo,
             IInquiryDetailRepository inqDRepo,
             IOrderHeaderRepository ordHRepo,
-            IOrderDetailRepository ordDRepo
+            IOrderDetailRepository ordDRepo,
+            IBrainTreeGate brain
             )
         {
             _prodRepo = prodRepo;
@@ -57,6 +62,7 @@ namespace Rocky.Controllers
             _inqDRepo = inqDRepo;
             _ordHRepo = ordHRepo;
             _ordDRepo = ordDRepo;
+            _brain = brain;
 
         }
 
@@ -121,6 +127,11 @@ namespace Rocky.Controllers
                 {
                     applicationUser = new ApplicationUser();
                 }
+
+                var gateway = _brain.GetGateway();
+                var clientToken = gateway.ClientToken.Generate();
+                ViewBag.ClientToken = clientToken;
+
             }
             else
             {
@@ -159,7 +170,7 @@ namespace Rocky.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ActionName("Summary")]
-        public async Task<IActionResult> SummaryPost(ProductUserVM ProductUserVM)
+        public async Task<IActionResult> SummaryPost(IFormCollection collection, ProductUserVM ProductUserVM)
         {
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
@@ -167,16 +178,10 @@ namespace Rocky.Controllers
             if (User.IsInRole(WC.AdminRole))
             {
                 //we need to create an order
-                var orderTotal = 0.0;
-                foreach (Product prod in ProductUserVM.ProductList)
-                {
-                    orderTotal += prod.Price * prod.TempSqFt;
-
-                }
                 OrderHeader orderHeader = new OrderHeader
                 {
                     CreatedByUserId = claim.Value,
-                    FinalOrderTotal = orderTotal,
+                    FinalOrderTotal = ProductUserVM.ProductList.Sum(x => x.TempSqFt * x.Price),
                     City = ProductUserVM.ApplicationUser.City,
                     StreetAddress = ProductUserVM.ApplicationUser.StreetAddress,
                     State = ProductUserVM.ApplicationUser.State,
@@ -196,13 +201,40 @@ namespace Rocky.Controllers
                     {
                         OrderHeaderId = orderHeader.Id,
                         PricePerSqFt = prod.Price,
-                        SqFt = prod.TempSqFt,
+                        Sqft = prod.TempSqFt,
                         ProductId = prod.Id
                     };
                     _ordDRepo.Add(orderDetail);
                 }
                 _ordDRepo.Save();
 
+                string nonceFromTheClient = collection["payment_method_nonce"];
+
+                var request = new TransactionRequest
+                {
+                    Amount = Convert.ToDecimal(orderHeader.FinalOrderTotal),
+                    PaymentMethodNonce = nonceFromTheClient,
+                    OrderId = orderHeader.Id.ToString(),
+                    Options = new TransactionOptionsRequest
+                    {
+                        SubmitForSettlement = true
+                    }
+                };
+
+                var gateway = _brain.GetGateway();
+                Result<Transaction> result = gateway.Transaction.Sale(request);
+
+                if (result.Target.ProcessorResponseText == "Approved")
+                {
+                    orderHeader.TransactionId = result.Target.Id;
+                    orderHeader.OrderStatus = WC.StatusApproved;
+                }
+                else
+                {
+                    orderHeader.OrderStatus = WC.StatusCancelled;
+                }
+
+                _ordHRepo.Save();
                 return RedirectToAction(nameof(InquiryConfirmation), new { id = orderHeader.Id });
             }
             else
@@ -269,10 +301,11 @@ namespace Rocky.Controllers
             return RedirectToAction(nameof(InquiryConfirmation));
         }
 
-        public IActionResult InquiryConfirmation()
+        public IActionResult InquiryConfirmation(int id = 0)
         {
+            OrderHeader orderHeader = _ordHRepo.FirstOrDefault(x => x.Id == id);
             HttpContext.Session.Clear();
-            return View();
+            return View(orderHeader);
         }
 
         public IActionResult Remove(int Id)
@@ -304,6 +337,12 @@ namespace Rocky.Controllers
             HttpContext.Session.Set(WC.SessionCart, shoppingCartList);
             TempData[WC.Success] = "Success updated";
             return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult Clear()
+        {
+            HttpContext.Session.Clear();
+            return RedirectToAction("Index", "Home");
         }
     }
 }
