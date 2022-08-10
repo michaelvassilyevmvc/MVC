@@ -16,6 +16,7 @@ using Rocky_Utility;
 using Rocky_DataAccess.Repository;
 using Rocky_DataAccess.Repository.IRepository;
 using Rocky_Utility.BrainTree;
+using Rocky_DataAccess.Initializer;
 
 namespace Rocky
 {
@@ -57,6 +58,7 @@ namespace Rocky
             services.AddScoped<IApplicationUserRepository, ApplicationUserRepository>();
             services.AddScoped<IOrderHeaderRepository, OrderHeaderRepository>();
             services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
+            services.AddScoped<IDbInitializer, DbInitializer>();
 
             services.AddAuthentication().AddFacebook(options =>
             {
@@ -68,7 +70,7 @@ namespace Rocky
         }
 
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IDbInitializer dbInitializer)
         {
             if (env.IsDevelopment())
             {
@@ -87,6 +89,7 @@ namespace Rocky
 
             app.UseAuthentication();
             app.UseAuthorization();
+            dbInitializer.Initialize();
             app.UseSession();
 
             app.UseEndpoints(endpoints =>
